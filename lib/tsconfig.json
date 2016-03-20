@@ -1,0 +1,21 @@
+{
+  "compileOnSave": true,
+  "compilerOptions": {
+    "declaration": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "module": "system",
+    "noEmitOnError": false,
+    "noImplicitAny": true,
+    "moduleResolution": "node",
+    "outFile": "../ds-toast.js",
+    "rootDir": ".",
+    "inlineSourceMap": true,
+    "sourceRoot": "/",
+    "target": "es5"
+  },
+  "files": [
+    "ds-toast/ds-toast.ts",
+    "../typings/browser.d.ts"
+  ]
+}
