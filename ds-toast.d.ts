@@ -1,9 +1,9 @@
 declare module "ds-toast/services/ds-toast-service" {
     import { Subject } from 'rxjs/Subject';
     export class Toast {
-        private text;
-        private mood;
-        private title;
+        text: string;
+        mood: string;
+        title: string;
         constructor(text: string, mood?: string, title?: string);
     }
     export interface IDsToastConfig {
@@ -19,6 +19,7 @@ declare module "ds-toast/services/ds-toast-service" {
         private toastTimeOuts;
         constructor();
         setConfig(_config: IDsToastConfig): void;
+        getConfig(): IDsToastConfig;
         success(_text: string, _title?: string): void;
         warn(_text: string, _title?: string): void;
         info(_text: string, _title?: string): void;
@@ -28,9 +29,18 @@ declare module "ds-toast/services/ds-toast-service" {
     }
 }
 declare module "ds-toast/toasts/ds-toast-basic" {
-    export class DsToastBasic {
-        config: {};
-        constructor();
+    import { OnInit } from 'angular2/core';
+    import { DsToastService, Toast } from "ds-toast/services/ds-toast-service";
+    export class DsToastBasic implements OnInit {
+        private dsToast;
+        config: Toast;
+        private generalConfig;
+        private componentClasses;
+        private status;
+        constructor(dsToast: DsToastService);
+        ngOnChanges(x: any): void;
+        ngOnInit(): void;
+        setComponentClasses(): void;
     }
 }
 declare module "ds-toast/ds-toast" {

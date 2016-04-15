@@ -4,7 +4,7 @@ import {Observable} from 'rxjs/Observable';
 
 
 export class Toast {
-  constructor(private text: string, private mood?: string, private title?: string) { }
+  constructor(public text: string, public mood?: string, public title?: string) { }
 }
 
 export interface IDsToastConfig {
@@ -26,15 +26,19 @@ export class DsToastService {
     console.log('init');
 
     this._config = {
-      toastLiveTime: 5000,
+      toastLiveTime: 50000,
       maxElements: 4,
-      position: 'bottom center'
+      position: 'bottom left'
     }
   }
 
   setConfig(_config: IDsToastConfig) {
     this._config = _config;
     this.config.next(this._config);
+  }
+  
+  getConfig(): IDsToastConfig {
+    return this._config;
   }
 
   success(_text: string, _title?: string) {
@@ -54,7 +58,7 @@ export class DsToastService {
 
   addToast(_text: string, _mood: string, _title?: string) {
     let toast = new Toast(_text, _mood, _title);
-    this._toasts.push(toast);
+    this._toasts.unshift(toast);
 
     if (this._toasts.length > this._config.maxElements) {
       this.earlyRemove();

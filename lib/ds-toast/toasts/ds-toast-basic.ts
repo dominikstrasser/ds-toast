@@ -1,10 +1,10 @@
-import {Component, Input} from 'angular2/core';
-
+import {Component, Input, OnInit} from 'angular2/core';
+import { DsToastService, IDsToastConfig, Toast } from '../services/ds-toast-service';
 
 @Component({
   selector: 'ds-toast-basic',
   template: `
-    <div class="ds-toast-basic" [ngClass]=config.mood>
+    <div class="ds-toast-basic" [ngClass]=[componentClasses]>
       <h2 class="ds-toast-basic__title">{{config.title}}</h2>
       <span class="ds-toast-basic__text">{{config.text}}</span>
     </div>
@@ -14,19 +14,23 @@ import {Component, Input} from 'angular2/core';
       padding: 0.5em 1em;
       margin-bottom: 0.5em;
       display: inline-block;
+    }
+
+
+    .ds-toast-basic.fadeIn {
       animation-name: fadeIn;
-      animation-duration: 200ms;
+      animation-duration: 400ms;
       animation-fill-mode: forwards;
-      animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1.275);  
     }
     
     .ds-toast-basic.fadeOut {
       animation-name: fadeOut;
-      animation-duration: 200ms;
-      animation-fill-mode: forwards;
+      animation-duration: 400ms;
+      animation-play-state:running;
       animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
-
+    
     .ds-toast-basic__title {
       margin: 0px;
       padding: 0px;
@@ -49,11 +53,11 @@ import {Component, Input} from 'angular2/core';
     
     @keyframes fadeOut {
       from {
-        transform: translateX(0px);
+        height: 100%;
         opacity: 1;
       }
       to {
-        transform: translateX(-100px);
+        height: 0%;
         opacity: 0;
       }
     }
@@ -74,10 +78,35 @@ import {Component, Input} from 'angular2/core';
   directives: [],
   pipes: []
 })
-export class DsToastBasic {
+export class DsToastBasic implements OnInit {
 
-  @Input() config = {};
+  @Input() config: Toast = null;
 
-  constructor() {}
+  private generalConfig: IDsToastConfig = null;
+  private componentClasses: string = '';
+  private status: string = '';
+  constructor(private dsToast: DsToastService) {
+    this.generalConfig = dsToast.getConfig()
+  }
+  
+  ngOnChanges (x:any) {
+    console.log('CHANGE!')
+    console.log(x);
+  }
+
+  ngOnInit() {
+    console.log('INIT');
+    this.status = 'fadeIn';
+    this.setComponentClasses();
+    setTimeout(() => {
+      this.status = 'fadeOut';
+      this.setComponentClasses();
+    }, this.generalConfig.toastLiveTime - 700);
+    
+  }
+  
+  setComponentClasses() {
+    this.componentClasses = this.status + ' ' + this.config.mood;
+  }
 
 }
